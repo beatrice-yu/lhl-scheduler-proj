@@ -103,6 +103,15 @@ const useApplicationData = (initial) => {
 
     webSocket.onmessage = function (event) {
       console.log("Message Received: ", event.data);
+      const messageReceived = JSON.parse(event.data);
+
+      dispatch({
+        type: SET_INTERVIEW,
+        value: {
+          id: messageReceived.id,
+          interview: messageReceived.interview
+        }
+      });
     }
 
     Promise.all([
@@ -115,7 +124,7 @@ const useApplicationData = (initial) => {
         value: {
           days: all[0].data,
           appointments: all[1].data,
-          interviewers: all[2].data,
+          interviewers: all[2].data
         }
       });
     });
