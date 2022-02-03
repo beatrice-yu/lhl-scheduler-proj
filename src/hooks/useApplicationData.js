@@ -24,6 +24,19 @@ const reducer = (state, action) => {
       appointments[action.value.id] = { ...appointments[action.value.id], interview: action.value.interview };
 
       const days = [...state.days];
+
+      days.forEach(day => {
+        let spots = 0;
+        
+        day.appointments.forEach(id => {
+          if (!appointments[id].interview) {
+            spots++;
+          }
+        });
+
+        day.spots = spots;
+      });
+
       return {
         ...state,
         appointments,
@@ -45,24 +58,9 @@ const useApplicationData = (initial) => {
     interviewers: {}
   });
 
-  const updateInterviewSpots = (id, transaction) => {
-    const day = state.days.find(day => day.name === state.day);
-
-    switch (transaction) {
-      case 'cancel':
-        day.spots++;
-        break;
-      case 'book':
-        (state.appointments[id].interview === null) && day.spots--;
-        break;
-      default:
-        break;
-    }
-  };
-
-  const bookInterview = (id, interview) => {
-    return axios
-      .put(`http://localhost:8001/api/appointments/${id}`, { interview })
+  async function bookInterview(id, interview) {
+    const result = await axios
+      .put(`/api/appointments/${id}`, { interview })
       .then(res => {
         dispatch({
           type: SET_INTERVIEW,
@@ -72,14 +70,16 @@ const useApplicationData = (initial) => {
           }
         });
       })
-      .then(() => {
-        updateInterviewSpots(id, 'book');
+      .catch(err => {
+        console.log(err);
       });
+
+    return result;
   };
 
-  const cancelInterview = (id) => {
-    return axios
-      .delete(`http://localhost:8001/api/appointments/${id}`)
+  async function cancelInterview(id) {
+    const result = await axios
+      .delete(`/api/appointments/${id}`)
       .then(() => {
         dispatch({
           type: SET_INTERVIEW,
@@ -88,10 +88,9 @@ const useApplicationData = (initial) => {
             interview: null
           }
         });
-      })
-      .then(() => {
-        updateInterviewSpots(id, 'cancel');
       });
+      
+    return result;
   };
 
   useEffect(() => {
@@ -102,7 +101,6 @@ const useApplicationData = (initial) => {
     };
 
     webSocket.onmessage = function (event) {
-      //console.log("Message Received: ", event.data);
       const messageReceived = JSON.parse(event.data);
 
       dispatch({
@@ -128,6 +126,8 @@ const useApplicationData = (initial) => {
         }
       });
     });
+
+    return () => webSocket.close();
   }, []);
 
   const setDay = day => dispatch({ type: SET_DAY, value: day });
