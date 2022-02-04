@@ -28,12 +28,12 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "f8:8b:bb:1e:0d:88:dd:94:06:fd:f5:d1:6f:be:63:9d"
+            - "f2:85:bb:08:a3:7e:2e:21:44:e2:b6:e7:6c:10:23:d6"
       - checkout
       - run:
           name: Push Master to Production
           command: |
-            git push https://github.com/lighthouse-labs/scheduler.git master:production
+            git push https://github.com/beatrice-yu/lhl-scheduler-proj.git master:production
 
 workflows:
   version: 2
