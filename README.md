@@ -30,3 +30,8 @@ npm test
 ```sh
 npm run storybook
 ```
+
+## Links
+
+- [Deployed application in Netlify](https://61fddf36de6fbb518c22560c--heuristic-banach-857157.netlify.app/)
+- [Deployed API in Heroku](https://lhl-scheduler-proj.herokuapp.com/)
