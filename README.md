@@ -31,7 +31,10 @@ npm test
 npm run storybook
 ```
 
-## Links
+## Links and Other Related Information
 
 - [Deployed application in Netlify](https://61fddf36de6fbb518c22560c--heuristic-banach-857157.netlify.app/)
 - [Deployed API in Heroku](https://lhl-scheduler-proj.herokuapp.com/)
+
+Screenshot of CircleCI pipeline:
+![Screenshot of CircleCI pipeline](https://github.com/beatrice-yu/lhl-scheduler-proj/blob/master/docs/circleci.png?raw=true)
